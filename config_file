@@ -1,0 +1,48 @@
+# LBFGSParameter start
+
+lbfgs_m=16
+# ||g|| < epsilon * max(1, ||x||)
+lbfgs_epsilon=1e-2
+# (f' - f) / f < delta, f' is loss past iterations ago
+lbfgs_past=1
+lbfgs_delta=1e-5
+lbfgs_max_iterations=100
+
+# backtracking_owlqn, backtracking_armijo
+# backtracking_wolfe, backtracking_strong_wolfe
+lbfgs_l1_c=1.0
+lbfgs_line_search=backtracking_owlqn
+lbfgs_max_line_search=10
+lbfgs_ftol=1e-4
+lbfgs_wolfe=0.9
+
+# LBFGSParameter end
+
+# true or false
+lbfgs_local = true
+
+# must set for all kinds of job
+lbfgs_log_file=stdout
+lbfgs_l2_c=0.0
+lbfgs_data_path=a9a.avro
+lbfgs_test_data_path=a9at.avro
+lbfgs_test_threshold=0.5
+lbfgs_data_max_index=123
+
+# must set for mapreduce jobs
+lbfgs_job_name=my_lbfgs
+lbfgs_working_directory=hc/lbfgs
+
+# must set for mr1
+lbfgs_mr1_num_reduce_tasks=2
+lbfgs_mr1_less_memory=true
+
+# optional set for mr1, prefix=hadoop-conf.mr1.
+hadoop-conf.mr1.mapreduce.job.user.classpath.first=true
+hadoop-conf.mr1.mapred.min.split.size=1
+hadoop-conf.mr1.mapred.max.split.size=150000
+
+# optional set for mr2
+
+# optional set for mr3
+
