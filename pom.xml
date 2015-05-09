@@ -26,7 +26,7 @@
 			</plugin>
 			<plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -66,11 +66,6 @@
 			<artifactId>avro-mapred</artifactId>
 			<version>1.7.7</version>
 			<classifier>hadoop2</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.mahout</groupId>
-			<artifactId>mahout-math</artifactId>
-			<version>0.9</version>
 		</dependency>
 	</dependencies>
 </project>
