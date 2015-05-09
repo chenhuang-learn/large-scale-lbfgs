@@ -19,8 +19,15 @@ import hc.parallel.vecfree.VecFreeLocal;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
+		if(args.length != 1) {
+			System.out.println("run a local job:");
+			System.out.println("java -jar <xxx.jar> <config_file>");
+			System.out.println("run a hadoop job:");
+			System.out.println("hadoop jar <xxx.jar> <config_file>");
+		}
+		
 		Config config = new Config();
-		config.setConfigFile("config_file");
+		config.setConfigFile(args[0]);
 		System.out.println(config);
 		
 		LossFunction lossFunction = null;

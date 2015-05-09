@@ -110,14 +110,6 @@ public class LBFGS {
 			
 			if(progressFunction != null) {
 				int exitCode = 0;
-				exitCode = progressFunction.testResultProgress(result, k);
-				if(exitCode != 0) {
-					System.out.printf("exit in after testResultProgress, exitcode : %d\n", exitCode);
-					if(ptrFx != null) {
-						ptrFx[0] = fx[0];
-					}
-					return;
-				}
 				if(config.param.orthantwiseC == 0.f) {
 					exitCode = progressFunction.progress(x, g, fx[0], xnorm, gnorm, stp[0], k, ls);
 				} else {
@@ -125,6 +117,14 @@ public class LBFGS {
 				}
 				if(exitCode != 0) {
 					System.out.printf("exit in after progress, exitcode : %d\n", exitCode);
+					if(ptrFx != null) {
+						ptrFx[0] = fx[0];
+					}
+					return;
+				}
+				exitCode = progressFunction.testResultProgress(result, k);
+				if(exitCode != 0) {
+					System.out.printf("exit in after testResultProgress, exitcode : %d\n", exitCode);
 					if(ptrFx != null) {
 						ptrFx[0] = fx[0];
 					}
