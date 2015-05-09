@@ -13,8 +13,8 @@
 4. use a single configuration file to config runtime environment
 
 ## usage
-1. run a local job: java -jar <xxx.jar> <config-file>
-2. run a hadoop job: hadoop jar <xxx.jar> <config-file>
+1. run a local job: java -jar xxx.jar config-file
+2. run a hadoop job: hadoop jar xxx.jar config-file
 
 ## todo
 1. support more loss functions
