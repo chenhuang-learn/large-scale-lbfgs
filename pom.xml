@@ -30,7 +30,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>parallel.train.Main</mainClass>
+                            <mainClass>hc.parallel.train.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
