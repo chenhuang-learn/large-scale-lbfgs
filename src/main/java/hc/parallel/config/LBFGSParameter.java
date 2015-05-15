@@ -35,7 +35,7 @@ public final class LBFGSParameter {
 	 * objective value of past iterations ago, and f is the objective value of
 	 * the current iteration. The default value is 0.
 	 */
-	public float delta = 1e-4f;
+	public float delta = 1e-5f;
 
 	/**
 	 * The maximum number of iterations. The lbfgs() function terminates an
@@ -99,6 +99,7 @@ public final class LBFGSParameter {
 	 * this parameter to a small value. A typical small value is 0.1. This
 	 * parameter shuold be greater than the ftol parameter (1e-4) and smaller
 	 * than 1.0.
+	 * not used!!!!!!!!!!!!!!!!!!!!!!
 	 */
 	public float gtol = 0.9f;
 
@@ -108,6 +109,7 @@ public final class LBFGSParameter {
 	 * The line search routine will terminate with the status code
 	 * (::LBFGSERR_ROUNDING_ERROR) if the relative width of the interval of
 	 * uncertainty is less than this parameter.
+	 * not used!!!!!!!!!!!!!!!!!!!!!!
 	 */
 	public float xtol = 1e-16f;
 
@@ -150,10 +152,6 @@ public final class LBFGSParameter {
 		return "LBFGSParameter [m=" + m + ", epsilon=" + epsilon + ", past="
 				+ past + ", delta=" + delta + ", maxIterations="
 				+ maxIterations + ", linesearch=" + linesearch
-				+ ", maxLinesearch=" + maxLinesearch + ", minStep=" + minStep
-				+ ", maxStep=" + maxStep + ", ftol=" + ftol + ", wolfe="
-				+ wolfe + ", gtol=" + gtol + ", xtol=" + xtol
-				+ ", orthantwiseC=" + orthantwiseC + ", orthantwiseStart="
-				+ orthantwiseStart + ", orthantwiseEnd=" + orthantwiseEnd + "]";
+				+ ", maxLinesearch=" + maxLinesearch + ", orthantwiseC=" + orthantwiseC + "]";
 	}
 }

@@ -22,6 +22,11 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 
+/**
+ * @author chenhuang
+ * provide two methods, libsvmFile->avroFile, avroFile->libsvmFile
+ * feature index in libsvmFile can start from 0, label must be 1 or -1
+ */
 public class DataFormatTransform {
 	
 	public static void libSVMFile2AvroFile(String libSVMFile, String AvroFile)
@@ -82,15 +87,20 @@ public class DataFormatTransform {
 			}
 			data.setResponse(label);
 			List<entry> l = new ArrayList<entry>();
+			int indexBefore = -1;
 			for(int i=1; i<fields.length; i++) {
 				String[] subFields = fields[i].split(":");
 				int index = Integer.parseInt(subFields[0]);
+				if(index <= indexBefore) {
+					throw new RuntimeException("index <= indexBefore");
+				}
+				indexBefore = index;
 				float value = Float.parseFloat(subFields[1]);
 				l.add(new entry(index, value));
 			}
 			data.setFeatures(l);
-			data.setWeight((float)1.0);
-			data.setOffset((float)0.0);
+			data.setWeight(1.f);
+			data.setOffset(0.f);
 		} catch(RuntimeException e) {
 			throw new DataFormatException(fileName, lineNumber, e.getClass() + " " + e.getMessage());
 		}
@@ -103,7 +113,7 @@ public class DataFormatTransform {
 	
 	public static void main(String[] args) throws IOException {
 		if(args.length != 2) {
-			System.out.println("java -jar dataformat_transform.jar input output");
+			System.out.println("java -jar libsvm2Avro.jar input output");
 		}
 		libSVMFile2AvroFile(args[0], args[1]);
 	}

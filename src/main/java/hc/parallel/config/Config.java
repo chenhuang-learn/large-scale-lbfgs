@@ -10,9 +10,13 @@ import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
 
+/**
+ * @author chenhuang
+ */
 public class Config {
 	
 	private Map<String, String> m = null;
+	
 	public LBFGSParameter param = null;
 	
 	public String logFile = null;
@@ -26,7 +30,7 @@ public class Config {
 	
 	public String jobName = "large-scale-lbfgs";
 	public String workingDirectory = null;
-	public int mr1NumReduceTasks = -1;
+	public int mr1NumReduceTasks = 10;
 	public boolean lessMemory = false;
 	
 	public Config() { }
@@ -86,21 +90,21 @@ public class Config {
 			throw new IllegalStateException("lbfgs_local must be true or false");
 		}
 		
-		String less_memory = "false";
-		if(dataDimensions > 1e8) {
-			less_memory = "true";
-		}
-		if(m.containsKey("lbfgs_mr1_less_memory")) {
-			less_memory = m.get("lbfgs_mr1_less_memory").toLowerCase();
-		}
-		if(less_memory.equals("true")) {
-			lessMemory = true;
-		} else if(less_memory.equals("false")) {
-			lessMemory = false;
-		} else {
-			throw new IllegalStateException("lbfgs_mr1_less_memory must be true or false");
-		}
 		if(!localJob) {
+			String less_memory = "false";
+			if(dataDimensions > 1e8) {
+				less_memory = "true";
+			}
+			if(m.containsKey("lbfgs_mr1_less_memory")) {
+				less_memory = m.get("lbfgs_mr1_less_memory").toLowerCase();
+			}
+			if(less_memory.equals("true")) {
+				lessMemory = true;
+			} else if(less_memory.equals("false")) {
+				lessMemory = false;
+			} else {
+				throw new IllegalStateException("lbfgs_mr1_less_memory must be true or false");
+			}
 			if(m.containsKey("lbfgs_job_name")) {
 				jobName = m.get("lbfgs_job_name");
 			}
@@ -176,7 +180,7 @@ public class Config {
 				param.linesearch = LineSearchConstant.LBFGS_LINESEARCH_BACKTRACKING_WOLFE;
 			}
 			if(param.linesearch == LineSearchConstant.LBFGS_LINESEARCH_BACKTRACKING_OWLQN) {
-				throw new IllegalStateException("lbfgs_line_search cant be backtracking_owlqn");
+				throw new IllegalStateException("lbfgs_line_search can't be backtracking_owlqn");
 			}
 		}
 		if(param.orthantwiseEnd < 0) {
@@ -211,14 +215,13 @@ public class Config {
 
 	@Override
 	public String toString() {
-		return "Config [param=" + param + ", logFile=" + logFile
-				+ ", localJob=" + localJob + ", l2_c=" + l2_c + ", dataPath="
-				+ dataPath + ", testDataPath=" + testDataPath
-				+ ", testThreshold=" + testThreshold + ", dataDimensions="
-				+ dataDimensions + ", dataMaxIndex=" + dataMaxIndex
-				+ ", jobName=" + jobName + ", workingDirectory="
+		return "param=" + param + "\n"
+				+ "logFile=" + logFile + ", localJob=" + localJob + ", l2_c=" + l2_c 
+				+ ", dataPath=" + dataPath + ", testDataPath=" + testDataPath
+				+ ", testThreshold=" + testThreshold + ", dataMaxIndex=" + dataMaxIndex	+ "\n"
+				+ "jobName=" + jobName + ", workingDirectory="
 				+ workingDirectory + ", mr1NumReduceTasks=" + mr1NumReduceTasks
-				+ ", lessMemory=" + lessMemory + "]";
+				+ ", lessMemory=" + lessMemory;
 	}
 	
 	

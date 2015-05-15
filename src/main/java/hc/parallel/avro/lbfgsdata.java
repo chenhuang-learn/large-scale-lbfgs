@@ -298,4 +298,7 @@ public class lbfgsdata extends org.apache.avro.specific.SpecificRecordBase imple
       }
     }
   }
+    public static void main(String[] args) {
+    	System.out.println(lbfgsdata.SCHEMA$);
+    }
 }

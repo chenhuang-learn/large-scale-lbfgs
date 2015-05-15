@@ -1,5 +1,9 @@
 package hc.parallel.util;
 
+/**
+ * @author chenhuang
+ * methods in this class get careful consideration, including numerical precision and vector size.
+ */
 public class VectorOperator {
 	
 	public static float vecdot(float[] x, float[] y) {
@@ -28,6 +32,7 @@ public class VectorOperator {
 		System.arraycopy(src, 0, dest, 0, dest.length);
 	}
 	
+	/** dest = -src */
 	public static void vecncpy(float[] dest, float[] src) {
 		if(dest.length != src.length) {
 			throw new IllegalStateException("vec size error in vecncpy");
@@ -37,6 +42,7 @@ public class VectorOperator {
 		}
 	}
 	
+	/** dest += c * src */
 	public static void vecadd(float[] dest, float[] src, float c) {
 		if(dest.length != src.length) {
 			throw new IllegalStateException("vec size error in vecadd");
@@ -46,7 +52,11 @@ public class VectorOperator {
 		}
 	}
 	
+	/** dest = src1 - src2 */
 	public static void vecdiff(float[] dest, float[] src1, float[] src2) {
+		if((src1.length != src2.length) || (src2.length != dest.length)) {
+			throw new IllegalStateException("vec size error in vecdiff");
+		}
 		for (int i = 0; i < dest.length; i++) {
 			dest[i] = src1[i] - src2[i];
 		}
