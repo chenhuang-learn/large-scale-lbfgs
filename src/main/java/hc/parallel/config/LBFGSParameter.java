@@ -57,7 +57,7 @@ public final class LBFGSParameter {
 	 * the number of function and gradients evaluations per iteration for the
 	 * line search routine. The default value is 20.
 	 */
-	public int maxLinesearch = 10;
+	public int maxLinesearch = 20;
 
 	/**
 	 * The minimum step of the line search routine. The default value is \c

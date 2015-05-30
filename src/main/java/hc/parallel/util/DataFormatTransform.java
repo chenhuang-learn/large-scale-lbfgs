@@ -24,27 +24,30 @@ import org.apache.avro.specific.SpecificDatumWriter;
 
 /**
  * @author chenhuang
- * provide two methods, libsvmFile->avroFile, avroFile->libsvmFile
- * feature index in libsvmFile can start from 0, label must be 1 or -1
+ * provide two methods, libsvmFile(standard libsvm format, label must be 1 or -1)->avroFile, 
+ * avroFile->libsvmFile(not standard)
  */
 public class DataFormatTransform {
 	
-	public static void libSVMFile2AvroFile(String libSVMFile, String AvroFile)
-			throws IOException {
+	public static void libSVMFile2AvroFile(String libSVMFile, String AvroFile, 
+			float bias, float CPosi, float CNega) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(
 				libSVMFile), "UTF-8"));
 		String line = null;
 		int lineNumber = 1;
+		int maxIndex = -1;
 		DatumWriter<lbfgsdata> datumWriter = new SpecificDatumWriter<lbfgsdata>(lbfgsdata.class);
 		DataFileWriter<lbfgsdata> dataFileWriter = new DataFileWriter<lbfgsdata>(datumWriter);
 		dataFileWriter.setCodec(CodecFactory.deflateCodec(CodecFactory.DEFAULT_DEFLATE_LEVEL));
 		dataFileWriter.create(lbfgsdata.SCHEMA$, new File(AvroFile));
 		lbfgsdata data = new lbfgsdata();
 		while((line = br.readLine()) != null) {
-			libSVMLine2LBFGSData(libSVMFile, lineNumber, line, data);
+			int local_max_index = libSVMLine2LBFGSData(libSVMFile, lineNumber, line, data, bias, CPosi, CNega);
+			maxIndex = Math.max(maxIndex, local_max_index);
 			lineNumber += 1;
 			dataFileWriter.append(data);
 		}
+		System.out.println(maxIndex);
 		dataFileWriter.close();
 		br.close();
 	}
@@ -72,8 +75,10 @@ public class DataFormatTransform {
 		return buffer.toString();
 	}
 	
-	private static void libSVMLine2LBFGSData(String fileName, int lineNumber, String line, lbfgsdata data) {
+	private static int libSVMLine2LBFGSData(String fileName, int lineNumber, String line, 
+			lbfgsdata data, float bias, float CPosi, float CNega) {
 		try {
+			int max_index = -1;
 			if(data == null) {
 				data = new lbfgsdata();
 			}
@@ -81,13 +86,18 @@ public class DataFormatTransform {
 			if(fields.length <= 1) {
 				throw new RuntimeException("No label or No feature");
 			}
+			
 			int label = Integer.parseInt(fields[0]);
 			if((label != 1) && (label != -1)) {
 				throw new RuntimeException("label Must be 1 or -1");
 			}
 			data.setResponse(label);
+			
 			List<entry> l = new ArrayList<entry>();
-			int indexBefore = -1;
+			if(bias >= 0) {
+				l.add(new entry(0, bias));
+			}
+			int indexBefore = 0;
 			for(int i=1; i<fields.length; i++) {
 				String[] subFields = fields[i].split(":");
 				int index = Integer.parseInt(subFields[0]);
@@ -98,24 +108,37 @@ public class DataFormatTransform {
 				float value = Float.parseFloat(subFields[1]);
 				l.add(new entry(index, value));
 			}
+			max_index = Math.max(l.get(l.size()-1).getIndex(), max_index);
 			data.setFeatures(l);
-			data.setWeight(1.f);
+			
+			if(label == 1) {
+				if(CPosi > 0) {
+					data.setWeight(CPosi);
+				} else {
+					data.setWeight(1.f);
+				}
+			} else {
+				if(CNega > 0) {
+					data.setWeight(CNega);
+				} else {
+					data.setWeight(1.f);
+				}
+			}
 			data.setOffset(0.f);
+			return max_index;
 		} catch(RuntimeException e) {
 			throw new DataFormatException(fileName, lineNumber, e.getClass() + " " + e.getMessage());
 		}
 	}
 	
-	public static void testAvroAndLibSVM() throws IOException {
-		libSVMFile2AvroFile("a9at.txt", "a9at.avro");
-		AvroFile2LibSVMFile("a9at.avro", "a9at.new");
-	}
-	
 	public static void main(String[] args) throws IOException {
-		if(args.length != 2) {
-			System.out.println("java -jar libsvm2Avro.jar input output");
+		if(args.length != 5) {
+			System.out.println("libsvm file is standard format, but label must be 1 or -1\n"
+					+ "print max_index in the file(used in config_file)\n"
+					+ "java -jar libsvm2Avro.jar <input> <output> "
+					+ "<bias(used when >= 0)> <CPosi(used when > 0) <CNega(used when > 0)>>");
 		}
-		libSVMFile2AvroFile(args[0], args[1]);
+		libSVMFile2AvroFile(args[0], args[1], Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
 	}
 	
 }

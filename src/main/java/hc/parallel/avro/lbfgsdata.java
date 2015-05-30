@@ -7,7 +7,7 @@ package hc.parallel.avro;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class lbfgsdata extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"lbfgsdata\",\"namespace\":\"parallel.avro\",\"fields\":[{\"name\":\"response\",\"type\":\"int\"},{\"name\":\"features\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"entry\",\"fields\":[{\"name\":\"index\",\"type\":\"int\"},{\"name\":\"value\",\"type\":\"float\"}]}}},{\"name\":\"weight\",\"type\":\"float\",\"default\":1.0},{\"name\":\"offset\",\"type\":\"float\",\"default\":0.0}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"lbfgsdata\",\"namespace\":\"hc.parallel.avro\",\"fields\":[{\"name\":\"response\",\"type\":\"int\"},{\"name\":\"features\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"entry\",\"fields\":[{\"name\":\"index\",\"type\":\"int\"},{\"name\":\"value\",\"type\":\"float\"}]}}},{\"name\":\"weight\",\"type\":\"float\",\"default\":1.0},{\"name\":\"offset\",\"type\":\"float\",\"default\":0.0}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public int response;
   @Deprecated public java.util.List<hc.parallel.avro.entry> features;

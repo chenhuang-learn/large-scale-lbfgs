@@ -7,7 +7,7 @@ package hc.parallel.avro;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class entry extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"entry\",\"namespace\":\"parallel.avro\",\"fields\":[{\"name\":\"index\",\"type\":\"int\"},{\"name\":\"value\",\"type\":\"float\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"entry\",\"namespace\":\"hc.parallel.avro\",\"fields\":[{\"name\":\"index\",\"type\":\"int\"},{\"name\":\"value\",\"type\":\"float\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public int index;
   @Deprecated public float value;
