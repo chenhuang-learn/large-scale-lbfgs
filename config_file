@@ -8,16 +8,16 @@ lbfgs_delta=1e-5
 lbfgs_max_iterations=100
 
 # true(local job) or false(parallel job)
-lbfgs_local = false
+lbfgs_local = true
 # for l1/l2 regulariztion
 lbfgs_l1_c=0.0
 lbfgs_l2_c=1.0
 # log file path, train data path, test data path
 lbfgs_log_file=lbfgs_result
-lbfgs_data_path=hc/data/rcv1.avro
-lbfgs_test_data_path=hc/data/rcv1t.avro
+lbfgs_data_path=a9a.avro
+lbfgs_test_data_path=a9at.avro
 # max index of train/test data
-lbfgs_data_max_index=47236
+lbfgs_data_max_index=400
 # threshold for test, use it to calculate tp/fp/tn/fn
 lbfgs_test_threshold=0.5
 lbfgs_max_line_search=20
@@ -26,7 +26,7 @@ lbfgs_max_line_search=20
 # must set for mapreduce jobs
 lbfgs_job_name=large_scale_lbfgs
 lbfgs_working_directory=hc/lbfgs
-lbfgs_mr1_num_reduce_tasks=2
+lbfgs_mr1_num_reduce_tasks=10
 
 # optional set for mr1, prefix=hadoop-conf.mr1.
 hadoop-conf.mr1.mapreduce.job.user.classpath.first=true
