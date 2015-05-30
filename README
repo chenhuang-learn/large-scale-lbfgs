@@ -1,21 +1,50 @@
-# large-scale-lbfgs
+large-scale-lbfgs
+=================
 
-## reference
-1. Chen W, Wang Z, Zhou J. Large-scale L-BFGS using MapReduce[C]//Advances in Neural Information Processing Systems. 2014: 1332-1340.
-2. Andrew G, Gao J. Scalable training of L 1-regularized log-linear models[C]//Proceedings of the 24th international conference on Machine learning. ACM, 2007: 33-40.
-3. https://github.com/chokkan/liblbfgs.git
-4. https://github.com/linkedin/ml-ease.git
-
-## support
+support
+-------
 1. logistic regression using L1-regularization and L2-regularization
 2. train/test a model in local-environment(single machine) or hadoop-environment
 3. use avro file to save disk space and accelerate data loading
 4. use a single configuration file to config runtime environment
 
-## usage
-1. run a local job: java -jar xxx.jar config-file
-2. run a hadoop job: hadoop jar xxx.jar config-file
+usage
+------
+1. transform data format
+PURPOSE: transform standard libsvm_file to avro_file(used for train/test)
+MAIN-CLASS: hc.parallel.util.DataFormatTransform.java
+PACKAGE&RUN: java -jar libsvm2Avro.jar <input> <output> <bias> <CPosi> <CNega>
+<input>: standard libsvm file, but label must be 1 or -1
+<output>: avro file used for train/test
+<bias>: when set it >= 0, add a bias at feature index 0 for every sample
+<CPosi>: when set it > 0, set sample weight for every positive sample
+<CNega>: when set it > 0, set sample weight for every negative sample
+when CPosi/CNega <= 0, sample weight for positive/negative sample is 1.0
+PRINT: This program will print max feature index in this file
 
-## todo
-1. support more loss functions
-2. run in spark environment
+2. train/test a model
+PACKAGE: mvn clean package, get *-jar-with-dependencies in folder target
+CONFIGURATION: open config_file, edit it:
+<lbfgs_epsilon>, <lbfgs_past>, <lbfgs_delta>, <lbfgs_max_iterations> config stopping criteria
+<lbfgs_local>: when set it true, run train/test locally, otherwise run train/test in parallel environment(hadoop)
+<lbfgs_l1_c>, <lbfgs_l2_c>: used for l1, l2 regularization
+<lbfgs_data_path>, <lbfgs_test_data_path>: avro file for train, test(validation)
+<lbfgs_log_file>: used for print evalution result on testset
+<lbfgs_max_index>: max feature index in train&test file
+<lbfgs_test_threshold>: used for true_positive&false_negative calculation
+<lbfgs_max_line_search>: used for line search in lbfgs, set it to 10-40
+<lbfgs_job_name>, <lbfgs_working_directory>, <lbfgs_mr1_num_reduce>: used for config hadoop job name, working directory and son on
+RUN A LOCAL JOB: java -jar *-jar-with-dependencies.jar config_file
+RUN A PARALLEL JOB: java -jar *-jar-with-dependencies.jar config_file
+
+reference
+---------
+1. Chen W, Wang Z, Zhou J. Large-scale L-BFGS using MapReduce[C]//Advances in Neural Information Processing Systems. 2014: 1332-1340.
+2. Andrew G, Gao J. Scalable training of L 1-regularized log-linear models[C]//Proceedings of the 24th international conference on Machine learning. ACM, 2007: 33-40.
+3. https://github.com/chokkan/liblbfgs.git
+4. https://github.com/linkedin/ml-ease.git
+
+experiments
+-----------
+This code has tested on several datasets, include a9a, rcv1 and a news_click dataset.
+
